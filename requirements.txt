@@ -1,0 +1,11 @@
+Django==4.1.*
+djangorestframework==3.14.*
+djangorestframework-simplejwt
+django-cors-headers
+django-filter
+python-decouple
+Pillow
+drf_spectacular
+django-multiselectfield
+django-phonenumber-field[phonenumberslite]
+bpython
