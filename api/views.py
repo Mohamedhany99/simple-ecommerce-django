@@ -82,6 +82,7 @@ class UserLogin(generics.GenericAPIView):
             )
 
 
+# this is not used and replaced with the above make it using DRF
 @api_view(("POST",))
 @csrf_exempt
 def login_view(request):
@@ -108,6 +109,9 @@ class ListProductsView(generics.ListAPIView):
     serializer_class = ListProductSerializer
     filter_backends = (filters.SearchFilter,)
     search_fields = ["name"]
+    permission_classes = [
+        IsAuthenticated,
+    ]
 
     def get_queryset(self):
         queryset = Product.objects.all().order_by("price")
@@ -116,7 +120,7 @@ class ListProductsView(generics.ListAPIView):
     # we can use this list built in view to make a get list method or use the generic api view and return serializer.data
     def list(self, request, *args, **kwargs):
         try:
-            print(request.user)
+            # print(request.user)
             return super().list(request, *args, **kwargs)
         except Exception as e:
             print(e)
@@ -128,7 +132,16 @@ class ListProductsView(generics.ListAPIView):
 # task 8
 class AddToCartView(generics.GenericAPIView):
     serializer_class = AddToCartSerializer
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        print(request.user)
+        print(request.data)
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                data=serializer.validated_data, status=status.HTTP_201_CREATED
+            )
+        else:
+            return Response(data=serializer.errors, status=status.HTTP_409_CONFLICT)
         pass

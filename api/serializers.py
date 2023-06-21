@@ -65,12 +65,21 @@ class ListProductSerializer(serializers.ModelSerializer):
 
 
 class AddToCartSerializer(serializers.ModelSerializer):
+    products = serializers.SerializerMethodField()
+
     class Meta:
         model = UserCart
         fields = [
             "user",
             "products",
         ]
+
+    def create(self, validated_data):
+        products = validated_data.pop("products")
+        print(products)
+        cart = UserCart.objects.create(**validated_data)
+        cart.products.set(products)
+        return cart
 
 
 class OrderSerializer(serializers.ModelSerializer):
