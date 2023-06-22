@@ -189,15 +189,25 @@ class MakeOrder(generics.GenericAPIView):
 
     def post(self, request):
         try:
-            userprofile = get_object_or_404(UserProfile, user=request.user)
-            usercart = get_object_or_404(UserCart, user=userprofile)
+            userprofile = UserProfile.objects.get(user=request.user)
+            usercart = UserCart.objects.get(user=userprofile)
             total = usercart.products.aggregate(total_price=models.Sum("price"))[
                 "total_price"
             ]
             order = Order.objects.create(cart=usercart, total=total)
+            usercart.delete()
             serializer = self.serializer_class(instance=order)
             return Response(data=serializer.data, status=status.HTTP_200_OK)
-        except:
+        except UserProfile.DoesNotExist:
+            return Response(
+                data="cannot find user info", status=status.HTTP_404_NOT_FOUND
+            )
+        except UserCart.DoesNotExist:
+            return Response(
+                data="try to add items to cart first", status=status.HTTP_404_NOT_FOUND
+            )
+        except Exception as e:
+            print(e)
             return Response(
                 data="cannot make an order", status=status.HTTP_409_CONFLICT
             )
