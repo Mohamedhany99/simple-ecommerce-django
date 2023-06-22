@@ -156,7 +156,7 @@ class UserViewCart(generics.GenericAPIView):
     def get(self, request):
         try:
             user = get_object_or_404(UserProfile, user=request.user)
-            usercart = UserCart.objects.get(user=user)
+            usercart = UserCart.objects.filter(user=user)
         except UserCart.DoesNotExist:
             return Response(
                 data="try to add items to cart first", status=status.HTTP_404_NOT_FOUND
