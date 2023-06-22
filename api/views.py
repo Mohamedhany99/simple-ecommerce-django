@@ -1,4 +1,5 @@
 from django.contrib.auth.forms import UserCreationForm
+from django.db import models
 
 # from django.shortcuts import render, redirect
 from rest_framework.response import Response
@@ -158,6 +159,7 @@ class AddToCartView(generics.GenericAPIView):
 class UserViewCart(generics.GenericAPIView):
     user = None
     serializer_class = AddToCartSerializer
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         try:
@@ -177,4 +179,25 @@ class UserViewCart(generics.GenericAPIView):
         except:
             return Response(
                 data="cannot get the user cart", status=status.HTTP_409_CONFLICT
+            )
+
+
+# task 10 make an order
+class MakeOrder(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = OrderSerializer
+
+    def post(self, request):
+        try:
+            userprofile = get_object_or_404(UserProfile, user=request.user)
+            usercart = get_object_or_404(UserCart, user=userprofile)
+            total = usercart.products.aggregate(total_price=models.Sum("price"))[
+                "total_price"
+            ]
+            order = Order.objects.create(cart=usercart, total=total)
+            serializer = self.serializer_class(instance=order)
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
+        except:
+            return Response(
+                data="cannot make an order", status=status.HTTP_409_CONFLICT
             )
