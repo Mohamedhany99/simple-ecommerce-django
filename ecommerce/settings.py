@@ -142,7 +142,17 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
-
+# for mysql database
+# DATABASES = {
+#        'default': {
+#            'ENGINE': 'django.db.backends.mysql',
+#            'NAME': 'ecommercedb',
+#            'USER': 'admin',
+#            'PASSWORD': '123456',
+#            'HOST': 'localhost',
+#            'PORT': '5432',
+#        }
+#    }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
