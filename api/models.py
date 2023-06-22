@@ -50,7 +50,7 @@ class UserCart(models.Model):
 
 class Order(models.Model):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True)
-    cart = models.ForeignKey(UserCart, on_delete=models.CASCADE, null=True)
+    cart = models.ForeignKey(UserCart, on_delete=models.SET_NULL, null=True)
     total = models.DecimalField(max_digits=8, decimal_places=2)
 
     def __str__(self) -> str:
