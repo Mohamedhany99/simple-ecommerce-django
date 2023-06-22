@@ -194,7 +194,7 @@ class MakeOrder(generics.GenericAPIView):
             total = usercart.products.aggregate(total_price=models.Sum("price"))[
                 "total_price"
             ]
-            order = Order.objects.create(cart=usercart, total=total)
+            order = Order.objects.create(user=userprofile, cart=usercart, total=total)
             usercart.delete()
             serializer = self.serializer_class(instance=order)
             return Response(data=serializer.data, status=status.HTTP_200_OK)
@@ -211,3 +211,11 @@ class MakeOrder(generics.GenericAPIView):
             return Response(
                 data="cannot make an order", status=status.HTTP_409_CONFLICT
             )
+
+
+class ViewOrders(generics.ListAPIView):
+    user = None
+
+    def get_queryset(self):
+        queryset = Order.objects.filter()
+        return super().get_queryset()
