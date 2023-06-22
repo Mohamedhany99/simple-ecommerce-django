@@ -25,6 +25,7 @@ from api.views import (
     AddToCartView,
     UserViewCart,
     MakeOrder,
+    ViewOrders,
 )
 from rest_framework_simplejwt import views as jwt_views
 
@@ -42,4 +43,5 @@ urlpatterns = [
     path("add-cart/", AddToCartView.as_view(), name="add-to-cart"),
     path("user-cart/", UserViewCart.as_view(), name="view-cart"),
     path("make-order/", MakeOrder.as_view(), name="make-order"),
+    path("view-order/", ViewOrders.as_view(), name="view-order"),
 ]

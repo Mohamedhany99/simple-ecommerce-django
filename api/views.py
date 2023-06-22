@@ -194,10 +194,19 @@ class MakeOrder(generics.GenericAPIView):
             total = usercart.products.aggregate(total_price=models.Sum("price"))[
                 "total_price"
             ]
-            order = Order.objects.create(user=userprofile, cart=usercart, total=total)
-            usercart.delete()
-            serializer = self.serializer_class(instance=order)
-            return Response(data=serializer.data, status=status.HTTP_200_OK)
+            mutable_dict = request.data.copy()
+            mutable_dict["total"] = round(total, 2)
+            mutable_dict["cart"] = usercart.pk
+            mutable_dict["user"] = userprofile.pk
+            serializer = self.serializer_class(data=mutable_dict)
+            if serializer.is_valid():
+                serializer.save()
+                usercart.delete()
+                return Response(data=serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response(
+                    data=serializer.errors, status=status.HTTP_412_PRECONDITION_FAILED
+                )
         except UserProfile.DoesNotExist:
             return Response(
                 data="cannot find user info", status=status.HTTP_404_NOT_FOUND
@@ -215,7 +224,22 @@ class MakeOrder(generics.GenericAPIView):
 
 class ViewOrders(generics.ListAPIView):
     user = None
+    serializer_class = OrderSerializer
 
     def get_queryset(self):
-        queryset = Order.objects.filter()
-        return super().get_queryset()
+        queryset = Order.objects.filter(user=self.user)
+        print(queryset)
+        return queryset
+
+    def list(self, request, *args, **kwargs):
+        try:
+            self.user = UserProfile.objects.get(user=request.user)
+            return super().list(request, *args, **kwargs)
+        except UserProfile.DoesNotExist:
+            return Response(
+                data="cannot find user info", status=status.HTTP_404_NOT_FOUND
+            )
+        except Exception as e:
+            return Response(
+                data="cannot find order info", status=status.HTTP_409_CONFLICT
+            )
