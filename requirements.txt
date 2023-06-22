@@ -7,3 +7,5 @@ python-decouple
 drf_spectacular
 bpython
 psycopg
+flake8
+
