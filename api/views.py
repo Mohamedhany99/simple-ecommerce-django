@@ -9,7 +9,7 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
-from .models import Product, UserCart, Order
+from .models import Product, UserCart, Order, UserProfile
 from .serializers import (
     ListProductSerializer,
     AddToCartSerializer,
@@ -136,12 +136,13 @@ class AddToCartView(generics.GenericAPIView):
 
     def post(self, request):
         print(request.data)
-        serializer = self.serializer_class(data=request.data)
+        mutable_dict = request.data.copy()
+        print(request.user)
+        mutable_dict["user"] = get_object_or_404(UserProfile, user=request.user).pk
+        print(mutable_dict)
+        serializer = self.serializer_class(data=mutable_dict)
         if serializer.is_valid():
             serializer.save()
-            return Response(
-                data=serializer.validated_data, status=status.HTTP_201_CREATED
-            )
+            return Response(data=serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(data=serializer.errors, status=status.HTTP_409_CONFLICT)
-        pass

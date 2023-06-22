@@ -65,8 +65,6 @@ class ListProductSerializer(serializers.ModelSerializer):
 
 
 class AddToCartSerializer(serializers.ModelSerializer):
-    products = serializers.SerializerMethodField()
-
     class Meta:
         model = UserCart
         fields = [
@@ -75,9 +73,10 @@ class AddToCartSerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data):
+        print("validated data =", validated_data)
         products = validated_data.pop("products")
-        print(products)
-        cart = UserCart.objects.create(**validated_data)
+        print("**validated data:", validated_data["user"])
+        cart = UserCart.objects.create(user=validated_data["user"])
         cart.products.set(products)
         return cart
 
