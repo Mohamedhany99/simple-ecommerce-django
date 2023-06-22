@@ -23,6 +23,7 @@ from api.views import (
     UserRegister,
     UserLogin,
     AddToCartView,
+    UserViewCart,
 )
 from rest_framework_simplejwt import views as jwt_views
 
@@ -38,4 +39,5 @@ urlpatterns = [
     path("login/", UserLogin.as_view(), name="login"),
     path("products/", ListProductsView.as_view(), name="list-products"),
     path("add-cart/", AddToCartView.as_view(), name="add-to-cart"),
+    path("user-cart/", UserViewCart.as_view(), name="view-cart"),
 ]

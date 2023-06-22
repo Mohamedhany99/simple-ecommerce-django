@@ -146,3 +146,29 @@ class AddToCartView(generics.GenericAPIView):
             return Response(data=serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(data=serializer.errors, status=status.HTTP_409_CONFLICT)
+
+
+# task 9 user view cart
+class UserViewCart(generics.GenericAPIView):
+    user = None
+    serializer_class = AddToCartSerializer
+
+    def get(self, request):
+        try:
+            user = get_object_or_404(UserProfile, user=request.user)
+            usercart = UserCart.objects.get(user=user)
+        except UserCart.DoesNotExist:
+            return Response(
+                data="try to add items to cart first", status=status.HTTP_404_NOT_FOUND
+            )
+        except user.DoesNotExist:
+            return Response(
+                data="cannot find user info", status=status.HTTP_404_NOT_FOUND
+            )
+        try:
+            serializer = self.serializer_class(instance=usercart)
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
+        except:
+            return Response(
+                data="cannot get the user cart", status=status.HTTP_409_CONFLICT
+            )
