@@ -135,17 +135,23 @@ class AddToCartView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        print(request.data)
-        mutable_dict = request.data.copy()
-        print(request.user)
-        mutable_dict["user"] = get_object_or_404(UserProfile, user=request.user).pk
-        print(mutable_dict)
-        serializer = self.serializer_class(data=mutable_dict)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(data=serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(data=serializer.errors, status=status.HTTP_409_CONFLICT)
+        # print(request.data)
+        # mutable_dict = request.data.copy()
+        # print(request.user)
+        # mutable_dict["user"] = get_object_or_404(UserProfile, user=request.user).pk
+        # print(mutable_dict)
+        user = get_object_or_404(UserProfile, user=request.user)
+        products = request.data.get("products")
+        try:
+            cart = UserCart.objects.get(user=user)
+        except:
+            cart = UserCart.objects.create(user=user)
+
+        for prod in products:
+            cart.products.add(prod)
+            cart.save()
+        serializer = self.serializer_class(cart)
+        return Response(data=serializer.data, status=status.HTTP_201_CREATED)
 
 
 # task 9 user view cart
@@ -156,7 +162,7 @@ class UserViewCart(generics.GenericAPIView):
     def get(self, request):
         try:
             user = get_object_or_404(UserProfile, user=request.user)
-            usercart = UserCart.objects.filter(user=user)
+            usercart = UserCart.objects.get(user=user)
         except UserCart.DoesNotExist:
             return Response(
                 data="try to add items to cart first", status=status.HTTP_404_NOT_FOUND
