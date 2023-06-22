@@ -1,0 +1,280 @@
+{
+	"info": {
+		"_postman_id": "4b29a608-e02f-44d7-9a2c-ba6f48946483",
+		"name": "ecommerce",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25969146"
+	},
+	"item": [
+		{
+			"name": "register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "password",
+							"value": "Mohamed123456",
+							"type": "text"
+						},
+						{
+							"key": "confirm_password",
+							"value": "Mohamed123456",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "new_hany1",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "test@test.com",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/register/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"register",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "Hany",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "Mohamed123456",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/login/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"login",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "list products",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg3OTU4NTA4LCJpYXQiOjE2ODczNTM3MDgsImp0aSI6ImRjNGYyZThlYzViNTQ5YzY4ZDM3NjZhZWZlNzdjOTJjIiwidXNlcl9pZCI6MX0.D2CLCyD3s_M6ISrR-BjrVoy-bBaggbMHJHkE1tc3Y40",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/products/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"products",
+						""
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "su",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "verify token",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg4MDUxNTQzLCJpYXQiOjE2ODc0NDY3NDMsImp0aSI6ImVkYzhhMzZmODExNTRlNjI4Y2E1ZjJmZjgzZGU3ZmEyIiwidXNlcl9pZCI6MX0.NXHsSZ3V3Li4vjEwL-rCLK7lnK3A9jRqX0MJZpb3Ams",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "Hany",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "Mohamed123456",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/token/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"token",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add to cart",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg4MDI0ODMxLCJpYXQiOjE2ODc0MjAwMzEsImp0aSI6IjdkMjg2OWY4OGUxMzQwMGI4N2JiMDhjODQxMzQxNjM1IiwidXNlcl9pZCI6MX0.kS6hy6tm1AFo-_HoGMXvRP7ph-O1GIVVK65gnH6FymY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"products\":[1]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/add-cart/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"add-cart",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "view cart",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg4MDI0ODMxLCJpYXQiOjE2ODc0MjAwMzEsImp0aSI6IjdkMjg2OWY4OGUxMzQwMGI4N2JiMDhjODQxMzQxNjM1IiwidXNlcl9pZCI6MX0.kS6hy6tm1AFo-_HoGMXvRP7ph-O1GIVVK65gnH6FymY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/user-cart/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"user-cart",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "make an order",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg4MDUxNTQzLCJpYXQiOjE2ODc0NDY3NDMsImp0aSI6ImVkYzhhMzZmODExNTRlNjI4Y2E1ZjJmZjgzZGU3ZmEyIiwidXNlcl9pZCI6MX0.NXHsSZ3V3Li4vjEwL-rCLK7lnK3A9jRqX0MJZpb3Ams",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/make-order/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"make-order",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "view orders",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
